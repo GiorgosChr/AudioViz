@@ -1,0 +1,9 @@
+[submodule "modules/JUCE"]
+	path = modules/JUCE
+	url = git@github.com:juce-framework/JUCE.git
+[submodule "modules/cmake-includes"]
+	path = modules/cmake-includes
+	url = git@github.com:sudara/cmake-includes.git
+[submodule "modules/melatonin_blur"]
+	path = modules/melatonin_blur
+	url = git@github.com:sudara/melatonin_blur.git
