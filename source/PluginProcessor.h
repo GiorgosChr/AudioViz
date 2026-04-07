@@ -7,6 +7,10 @@
 class AudioPluginAudioProcessor final : public juce::AudioProcessor
 {
 public:
+    // FFT information
+    static constexpr int fftOrder = 11;
+    static constexpr int fftSize  = 1 << fftOrder; // 2^fftOrder
+
     //==============================================================================
     AudioPluginAudioProcessor();
     ~AudioPluginAudioProcessor() override;
@@ -43,13 +47,15 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    bool isNextFFTBlockReady() const;
+    void setNextFFTBlockReady(bool value);
+    std::array<float, fftSize>& getFFTData();
+    static constexpr int getFFTSize() {return fftSize;}
+
+
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
-
-    // FFT information
-    static constexpr int fftOrder = 11;
-    static constexpr int fftSize  = 1 << fftOrder; // 2^fftOrder
 
     juce::dsp::FFT forwardFFT {fftOrder};
     juce::dsp::WindowingFunction<float> window {(size_t) fftSize, juce::dsp::WindowingFunction<float>::hann};
@@ -59,7 +65,7 @@ private:
     std::array<float, fftSize> fftData {};
     
     int fifoIndex = 0;
-    bool nextFFTBlockReady = false;
+     std::atomic<bool> nextFFTBlockReady = false;
 
     // Helper functions to fill FIFO (First In First Out)
     // and to process the input.

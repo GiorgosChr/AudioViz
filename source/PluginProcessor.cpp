@@ -150,6 +150,21 @@ void AudioPluginAudioProcessor::computeFFT()
     nextFFTBlockReady = false;
 }
 
+bool AudioPluginAudioProcessor::isNextFFTBlockReady() const
+{
+    return nextFFTBlockReady;
+}
+
+void AudioPluginAudioProcessor::setNextFFTBlockReady(bool value)
+{
+    nextFFTBlockReady = value;
+}
+
+std::array<float, AudioPluginAudioProcessor::fftSize>& AudioPluginAudioProcessor::getFFTData()
+{
+    return fftData;
+}
+
 void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
                                               juce::MidiBuffer& midiMessages)
 {
